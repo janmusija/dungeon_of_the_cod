@@ -35,6 +35,4 @@ class Chunk{ // 16 x 16 x 4 grids of tiles
     std::string biome;
 };
 
-// collection of loaded chunks
-
 #endif

@@ -8,6 +8,7 @@
 #define creature_h
 
 #include "render/render.h"
+#include <unordered_map>
 
 class Creature{
     public:
@@ -21,12 +22,20 @@ class Creature{
     short z;
     std::string chunkid;
 
-    Fancy_Char symb;
+    Fancy_Char* symb;
 
 
     // skills
+    std::unordered_map<std::string,uint32_t> skills;
 
     // resistances
+    std::unordered_map<std::string,float>* resistances;
+
+    // inventory
+
+
+    // functions
+    void damage(std::unordered_map<std::string,uint32_t>& damage_vector);
 };
 
 class Player{ 

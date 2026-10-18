@@ -13,15 +13,15 @@
 #define DX 0.03125
 #define EVIL_BLOWUP_FACTOR 4.16
 
-float Terrain::ELEVATION(float x, float y, int lod){
+float Earth_Terrain::ELEVATION(float x, float y, int lod){
     return __ELEVATION.octave2D_01(x * __ELEVATION_SCALE, y * __ELEVATION_SCALE, lod);
 }
 
-float Terrain::SURFACE_ELEVATION(float x, float y, int lod){
+float Earth_Terrain::SURFACE_ELEVATION(float x, float y, int lod){
     return std::max(__SEA_FLOAT,ELEVATION(x,y,lod));
 }
 
-float Terrain::RAINFALL(float x, float y){
+float Earth_Terrain::RAINFALL(float x, float y){
     const int EL_LOD = 3; // to avoid silly locality issues
     float rv = 0.5 + __RAINFALL_VARIATION.octave2D_11(x * __RAIN_SCALE, y * __RAIN_SCALE, __RAIN_OCTAVES)/3;
     float sel = SURFACE_ELEVATION(x,y,EL_LOD);
@@ -50,7 +50,7 @@ float Terrain::RAINFALL(float x, float y){
 
     return rv;
 }
-float Terrain::TEMPERATURE(float x, float y){
+float Earth_Terrain::TEMPERATURE(float x, float y){
     float tv = __TEMPERATURE_VARIATION.octave2D_11(x * __TEMP_SCALE, y * __TEMP_SCALE, __TEMP_OCTAVES);
     tv -= (SURFACE_ELEVATION(x,y)-__SEA_FLOAT)/2;
     tv += sin(latitude_behavior_displacement + y*((2*PI)/latitude_behavior_period))*0.9;
@@ -58,18 +58,25 @@ float Terrain::TEMPERATURE(float x, float y){
     return tv/2.1;
 }
 
-float Terrain::ALIGNMENT(float x, float y){
+float Earth_Terrain::ALIGNMENT(float x, float y){
     float al = __ALIGNMENT.octave2D_11(x * __ALIGNMENT_SCALE, y * __ALIGNMENT_SCALE, __ALIGNMENT_OCTAVES);
     al -= std::log(x*x + y*y+1)/EVIL_BLOWUP_FACTOR;
     return al + 0.3;
 }
 
-float Terrain::MAGIC(float x, float y){
+float Earth_Terrain::MAGIC(float x, float y){
     return __MAGIC.octave2D_01(x * __MAGIC_SCALE, y * __MAGIC_SCALE, __MAGIC_OCTAVES);
 }
 
 Terrain::Terrain(uint32_t seed){
     __SEED = seed;
+    TILE_SCALE = 1.0/256;
+
+    max_elevation = 256; 
+    min_elevation = -255; 
+}
+
+Earth_Terrain::Earth_Terrain(uint32_t seed) : Terrain(seed) {
     std::mt19937 mt(seed); 
     __ELEVATION = siv::PerlinNoise { mt() };
     __RAINFALL_VARIATION = siv::PerlinNoise { mt() };
@@ -83,21 +90,17 @@ Terrain::Terrain(uint32_t seed){
     __ALIGNMENT_SCALE = 1.0/3;
     __MAGIC_SCALE = 1.0/8;
 
-    TILE_SCALE = 1.0/256;
-
-    max_elevation = 256; 
-    min_elevation = -255; 
     sea_level = 40;
     latitude_behavior_displacement = mt()*(1.5/std::numeric_limits<uint32_t>::max())-1.0;
 
     __SEA_FLOAT = (sea_level-min_elevation)*1.0/(max_elevation-min_elevation);
 }
 
-void Terrain::export_images(int32_t centerx, int32_t centery, int scale){
+void Earth_Terrain::export_images(int32_t centerx, int32_t centery, int scale, std::string dim_id){
     std::string fnb;
     std::stringstream filenamebase;
     Image image{ 512, 512 };
-    filenamebase << "img/" << __SEED << 'x' << centerx << 'y' << centery << 's' << scale;
+    filenamebase << "img/" << __SEED << 'x' << centerx << 'y' << centery << 's' << scale << dim_id;
     filenamebase >> fnb;
     // elevation
     {

@@ -6,23 +6,40 @@
 
 #include <iostream>
 #include "worldgen/biome/biome.h"
+#include "worldgen/biome/sky_islands.h"
 #include <ncurses.h>
 #include "render/render.h"
 
 // compile with
 // g++ main.cpp -o dotc -Wall -Wextra
 
+void initialize_wcout(){
+    std::locale::global(std::locale(""));
+    std::wcout.imbue(std::locale());
+}
+
+
 int main() {
-    /*
-    Terrain t(0);
+    
+    Earth_Terrain t(0);
     t.export_images(0,0,1);
     t.export_images(0,0,4);
     t.export_images(0,0,16);
-    */
-    
-    std::locale::global(std::locale(""));
-    std::wcout.imbue(std::locale());
+    Sky_Island_Terrain s(0);
+    s.export_images(0,0,1);
+    s.export_images(0,0,16);
 
+    Heaven_Terrain h(0);
+    h.export_images(0,0,16,"heaven");
+
+    Hell_Terrain hl(0);
+    hl.export_images(0,0,16,"hell");
+
+    Outside_Terrain os(0);
+    os.export_images(0,0,16,"outside");
+    os.export_images(0,0,1,"outside");
+    
+    initialize_wcout();
     initscr();
     register_color_pairs();
     printw("Hello World!");
@@ -37,6 +54,20 @@ int main() {
     refresh();
     getch();
     endwin();
-    std::wcout << cp437;
+    std::wcout << cp437mod;
+    return 0;
+}
+
+int maintest(){
+    initialize_wcout();
+    initscr();
+    register_color_pairs();
+
+
+
+
+    refresh();
+    getch();
+    endwin();
     return 0;
 }
