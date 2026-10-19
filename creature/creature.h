@@ -9,6 +9,8 @@
 
 #include "render/render.h"
 #include <unordered_map>
+#include "gamedata.h"
+#include <string>
 
 class Creature{
     public:
@@ -24,6 +26,9 @@ class Creature{
 
     Fancy_Char* symb;
 
+    // type of creature
+    std::string name;
+    std::string type;
 
     // skills
     std::unordered_map<std::string,uint32_t> skills;

@@ -7,6 +7,9 @@
 #ifndef gamedata_h
 #define gamedata_h
 
+#define CHUNK_WIDTH 16
+#define CHUNK_DEPTH 4
+
 class GAMEDAT;
 
 #endif

@@ -37,11 +37,32 @@ class Fancy_Char {
     }
 };
 
-inline void render(int x, int y, Fancy_Char c){
+inline void render_char(int x, int y, Fancy_Char c){
     int co = pair_fgbg(c.color,0);
     attron(COLOR_PAIR(co));
     mvaddwstr(y,x,std::wstring({c.character}).c_str());
     attroff(COLOR_PAIR(co));
+}
+
+inline void render_char_bg(int x, int y, Fancy_Char c, uint8_t bg){
+    int co = pair_fgbg(c.color,bg);
+    attron(COLOR_PAIR(co));
+    mvaddwstr(y,x,std::wstring({c.character}).c_str());
+    attroff(COLOR_PAIR(co));
+}
+
+inline void render_char_bg(int x, int y, Fancy_Char* c, uint8_t bg){
+    if (c){
+        int co = pair_fgbg(c->color,bg);
+        attron(COLOR_PAIR(co));
+        mvaddwstr(y,x,std::wstring({c->character}).c_str());
+        attroff(COLOR_PAIR(co));
+    } else {
+        int co = pair_fgbg(0,bg);
+        attron(COLOR_PAIR(co));
+        mvaddwstr(y,x,std::wstring({L' '}).c_str());
+        attroff(COLOR_PAIR(co));
+    }
 }
 
 #endif

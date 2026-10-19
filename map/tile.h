@@ -10,6 +10,7 @@
 #include <vector>
 #include "creature/creature.h"
 #include "item/item.h"
+#include "gamedata.h"
 
 /*
 
@@ -23,16 +24,22 @@ class Tile{
     bool stairdown; // if true, can go down
     std::vector<Creature*> creatures;
     std::vector<Item*> items;
+    
+    void render(GAMEDAT* gd, int x, int y);
+    Tile(bool wall, bool floor, bool stu, bool std);
+    Tile() = default;
 };
 
 class Chunk{ // 16 x 16 x 4 grids of tiles
     public:
-    Tile[16][16][4] tiles;
+    Tile tiles[CHUNK_WIDTH][CHUNK_WIDTH][CHUNK_DEPTH];
     std::string id;
     uint32_t posx;
     uint32_t posy;
-    uint32_t posz;
+    int32_t posz;
     std::string biome;
+
+    Chunk(); // dummy test
 };
 
 #endif
