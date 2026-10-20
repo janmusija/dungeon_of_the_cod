@@ -9,7 +9,7 @@
 
 /*
 
-The cod citadel is home to the God of the Cod (and many other Cod). The goal of the game is to defeat the God of the Cod. 
+The cod citadel is home to the Cod Emperor (and many other Cod). The goal of the game is to defeat the Cod Emperor. 
 
 The difficulty of doing so scales quite a bit; so winning the game on its own can be done in the early to midgame, but a "true ending" requires a lot more work
 

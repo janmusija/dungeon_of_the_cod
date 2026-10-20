@@ -5,6 +5,7 @@
 //
 
 #include "gamedata_def.h"
+#include <filesystem>
 
 void GAMEDAT::render_chunk_segment(Chunk* ch, int x, int y, int chx, int chy, int chz, int wid, int ht){
     for (int i = chx; i<chx+wid; i++){
