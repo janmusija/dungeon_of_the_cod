@@ -192,5 +192,5 @@ void GAMEDAT::unload_chunk(std::string ch){
 }
 
 void GAMEDAT::populate_chunk(std::string ch){
-
+    // add structures etc
 }

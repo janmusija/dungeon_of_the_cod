@@ -10,6 +10,7 @@
   - cell placement
   - proper integration into chunks
 - saving and loading (should mostly be  covered by proper chunkloading anyway)
+- lighting, visibility (raycasting)
 - status effects
   - templateable poison effects rather than a fixed one (-> VX)
 - day night cycle

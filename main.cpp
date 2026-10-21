@@ -10,6 +10,7 @@
 #include <ncurses.h>
 #include "render/render.h"
 #include "gamedata_def.h"
+#include <filesystem>
 
 // compile with
 // g++ main.cpp -o dotc -Wall -Wextra
@@ -19,9 +20,7 @@ void initialize_wcout(){
     std::wcout.imbue(std::locale());
 }
 
-
-int main() {
-    /*
+int testmain1(){
     Earth_Terrain t(0);
     t.export_images(0,0,1);
     t.export_images(0,0,4);
@@ -38,22 +37,96 @@ int main() {
 
     Outside_Terrain os(0);
     os.export_images(0,0,16,"outside");
-    os.export_images(0,0,1,"outside");*/
-    
+    os.export_images(0,0,1,"outside");
+    return 0;
+}
+
+int main() {
+    { // ensure save directory exists
+        std::filesystem::path savedir = "save";
+        if (!std::filesystem::exists(savedir)) {
+            std::filesystem::create_directory(savedir);
+        }
+    }
+    std::cout << "Create new save or load a preexisting one? (new / load): ";
+    std::string s;
+    std::string sn;
+    bool isloading = 0;
+    while (std::cin >> s, s != "new" && s != "load"){
+        std::cout << "Enter 'new' or 'load': ";
+    }
+    if (s == "new") {
+        bool awaitname = true;
+        while (awaitname){
+            std::cout << "Enter name for new save: ";
+            std::cin >> sn;
+            std::cout << "You chose the name: '" << sn << "'. Is this correct? (y/n)";
+            while (std::cin >> s, s != "y" && s != "n"  && s != "yes" && s != "no"  && s != "Y" && s != "N"){
+                std::cout << "Enter 'y' or 'n': ";
+            }
+            if (s == "y" || s == "Y" || s == "yes"){
+                std::filesystem::path savedir = "save";
+                savedir = savedir / sn;
+                if (std::filesystem::exists(savedir)){
+                    std::cout << "This is already the name of an existing save! If you want to continue playing that save, relaunch and select it from the load menu instead!\n Are you sure you want to overwrite it instead and start afresh? (y/n)";
+                    while (std::cin >> s, s != "y" && s != "n"  && s != "yes" && s != "no"  && s != "Y" && s != "N"){
+                        std::cout << "Enter 'y' or 'n': ";
+                    }
+                    if (s == "y" || s == "Y" || s == "yes") {
+                        awaitname = false;
+                        std::filesystem::remove_all(savedir); // !!
+                    }
+                } else {
+                awaitname = false;
+                }
+            }
+        }
+        std::filesystem::path sd = "save";
+        sd = sd / sn;
+        if (!std::filesystem::exists(sd)) {
+            std::filesystem::create_directory(sd);
+        }
+        // TK: pick seed (allow player to decide whether to choose or let it be chosen randomly)
+    } else if (s == "load"){
+        isloading = 1;
+        std::filesystem::path savedir = "save";
+        std::cout << "Existing saves:\n";
+        for (const auto & entry : std::filesystem::directory_iterator(savedir)) std::cout << entry.path().filename() << std::endl;
+        std::cout << "which to load?\n";
+        while (true){
+            std::cin >> s;
+            std::filesystem::path sd = savedir;
+            sd = sd / s;
+            if (std::filesystem::exists(sd)) {;
+                break;
+                sn = s;
+            }else {
+            std::cout << "Enter one of the savenames above (without quotes): ";
+            }
+        }
+        // TK ? 
+    }
     initialize_wcout();
     initscr();
-    GAMEDAT g(0);
-    g.savename = "test";
-    g.initialize_save_folders();
+    GAMEDAT g(0); // TK: seed; either loaded from save or given by new game creation
+    g.savename = sn;
+    // handle loading of save data if relevant
+    
+    // have player decide and load starting chunk / player's current position (depends based on if new save or loading)
+
+    // then, gameloop: alternate between ticking the game and rendering. When g needs player input, instead getch() then (if necessary) rerender. 
+
+    { // temp
     g.load_chunk("a");
     g.camera_chunk = &g.LOADED_CHUNKS["a"];
     g.render_game();
     getch();
+    }
     endwin();
     return 0;
 }
 
-int maintest(){
+int testmain2(){
     initialize_wcout();
     initscr();
     register_color_pairs();
