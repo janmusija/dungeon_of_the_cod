@@ -60,17 +60,18 @@ void GAMEDAT::load_chunk(std::string ch){
     // determine if it exists
     std::string s = "save/" + savename + "/" + ch;
     std::filesystem::path p = s;
-    std::cout << s << std::endl;
+    //std::cout << s << std::endl;
     bool failed_to_load = false;
     if (std::filesystem::exists(p)){
         std::ifstream is;
         std::string str; 
         is.open(s);
         std::string c2;
-        std::pair<std::string,Chunk> mappair = std::make_pair<std::string,Chunk>(std::move(c2),Chunk());
+        Chunk newchunk;
         if (std::getline(is,str,'\n') && str.length() >= CHUNK_WIDTH * CHUNK_WIDTH * CHUNK_DEPTH){
             for (int i = 0; i< CHUNK_WIDTH*CHUNK_WIDTH*CHUNK_DEPTH; i++){
-                Tile* tile_ptr = &(mappair.second.tiles[i%CHUNK_WIDTH][(i/CHUNK_WIDTH)%CHUNK_WIDTH][(i/(CHUNK_WIDTH*CHUNK_WIDTH))]);
+                Tile* tile_ptr = &(newchunk.tiles[i%CHUNK_WIDTH][(i/CHUNK_WIDTH)%CHUNK_WIDTH][(i/(CHUNK_WIDTH*CHUNK_WIDTH))]);
+                //std::cout << str[i];
                 if (str[i] == '_') {
                     tile_ptr->haswall = false;
                     tile_ptr->hasfloor = false;
@@ -105,6 +106,10 @@ void GAMEDAT::load_chunk(std::string ch){
             }
             // further loading details
 
+            //{auto search = LOADED_CHUNKS.find(ch); std::cout << (search == LOADED_CHUNKS.end());}
+            std::string c2 = ch;
+            LOADED_CHUNKS.insert(std::make_pair<std::string,Chunk>(std::move(c2),std::move(newchunk)));
+            //{auto search = LOADED_CHUNKS.find(ch); std::cout << (search == LOADED_CHUNKS.end());}
             is.close();
         } else {
             failed_to_load = true;
@@ -114,7 +119,7 @@ void GAMEDAT::load_chunk(std::string ch){
         failed_to_load = true;
     }
     if (failed_to_load){
-    std::cout << "bad\n";
+    //std::cout << "bad\n";
     // TK -- chunk generation
     std::string c2 = ch;
     LOADED_CHUNKS.insert(std::make_pair<std::string,Chunk>(std::move(c2),Chunk()));
