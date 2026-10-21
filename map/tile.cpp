@@ -43,7 +43,8 @@ Chunk::Chunk(){
     //posx = 0;
     //posy = 0;
     //posz = 0;
-    biome = "j";
+    populated = false;
+    biome = "hell";
     for (int i = 0; i < CHUNK_WIDTH; i++){
         for (int j = 0; j< CHUNK_WIDTH; j++){
             for (int k = 0; k < CHUNK_DEPTH; k++){

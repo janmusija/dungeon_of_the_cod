@@ -38,6 +38,7 @@ class Chunk{ // 16 x 16 x 4 grids of tiles
     //uint32_t posy;
     //int32_t posz;
     std::string biome;
+    bool populated;
 
     Chunk(); // dummy test
 };

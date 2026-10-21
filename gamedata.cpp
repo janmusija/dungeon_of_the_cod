@@ -105,16 +105,30 @@ void GAMEDAT::load_chunk(std::string ch){
                 } 
             }
             // further loading details
-
-            //{auto search = LOADED_CHUNKS.find(ch); std::cout << (search == LOADED_CHUNKS.end());}
-            std::string c2 = ch;
-            LOADED_CHUNKS.insert(std::make_pair<std::string,Chunk>(std::move(c2),std::move(newchunk)));
-            //{auto search = LOADED_CHUNKS.find(ch); std::cout << (search == LOADED_CHUNKS.end());}
-            is.close();
+            if (std::getline(is,str,'\n')){
+                // get biome
+                newchunk.biome = str;
+                if (std::getline(is,str,'\n')){
+                    // get whether it is populated
+                    if (str == "1"){
+                        newchunk.populated = true;
+                    } else {
+                        newchunk.populated = false;
+                    }
+                    //{auto search = LOADED_CHUNKS.find(ch); std::cout << (search == LOADED_CHUNKS.end());}
+                    std::string c2 = ch;
+                    LOADED_CHUNKS.insert(std::make_pair<std::string,Chunk>(std::move(c2),std::move(newchunk)));
+                    //{auto search = LOADED_CHUNKS.find(ch); std::cout << (search == LOADED_CHUNKS.end());}
+                } else {
+                    failed_to_load = true;
+                }
+            } else {
+                failed_to_load = true;
+            }
         } else {
             failed_to_load = true;
-            is.close();
         }
+        is.close();
     } else {
         failed_to_load = true;
     }
@@ -156,6 +170,11 @@ void GAMEDAT::save_chunk(std::string ch){
         }
         str.push_back('\n');
         str = str + (search->second.biome + "\n");
+        if (search->second.populated == true){
+            str.push_back('1'); str.push_back('\n');
+        } else {
+            str.push_back('0'); str.push_back('\n');
+        };
         os.open(s);
         os << str;
         os.close();
@@ -165,6 +184,13 @@ void GAMEDAT::save_chunk(std::string ch){
 }
 
 void GAMEDAT::unload_chunk(std::string ch){
-    save_chunk(ch);
+    auto search = LOADED_CHUNKS.find(ch);
+    if (search != LOADED_CHUNKS.end()){
+        save_chunk(ch);
+        LOADED_CHUNKS.erase(search);
+    }
+}
+
+void GAMEDAT::populate_chunk(std::string ch){
 
 }
