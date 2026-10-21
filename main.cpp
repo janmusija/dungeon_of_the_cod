@@ -43,6 +43,8 @@ int main() {
     initialize_wcout();
     initscr();
     GAMEDAT g(0);
+    g.savename = "test";
+    g.initialize_save_folders();
     g.load_chunk("a");
     g.camera_chunk = &g.LOADED_CHUNKS["a"];
     g.render_game();

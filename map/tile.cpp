@@ -40,9 +40,9 @@ void Tile::render(GAMEDAT* gd, int x, int y){
 }
 
 Chunk::Chunk(){
-    posx = 0;
-    posy = 0;
-    posz = 0;
+    //posx = 0;
+    //posy = 0;
+    //posz = 0;
     biome = "j";
     for (int i = 0; i < CHUNK_WIDTH; i++){
         for (int j = 0; j< CHUNK_WIDTH; j++){

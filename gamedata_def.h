@@ -33,6 +33,10 @@ class GAMEDAT{
     void load_chunk(std::string ch);
 
     void unload_chunk(std::string ch);
+    
+    void save_chunk(std::string ch);
+
+    void initialize_save_folders();
 };
 
 #endif

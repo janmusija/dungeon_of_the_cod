@@ -34,9 +34,9 @@ class Chunk{ // 16 x 16 x 4 grids of tiles
     public:
     Tile tiles[CHUNK_WIDTH][CHUNK_WIDTH][CHUNK_DEPTH];
     std::string id;
-    uint32_t posx;
-    uint32_t posy;
-    int32_t posz;
+    //uint32_t posx;
+    //uint32_t posy;
+    //int32_t posz;
     std::string biome;
 
     Chunk(); // dummy test

@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include "gamedata.h"
 #include <string>
+#include <unordered_set>
 
 class Creature{
     public:
@@ -41,6 +42,9 @@ class Creature{
 
     // functions
     void damage(std::unordered_map<std::string,uint32_t>& damage_vector);
+
+    // tags
+    std::unordered_set<std::string> tags; // e.g. "boss"
 };
 
 class Player{ 
