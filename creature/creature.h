@@ -12,6 +12,7 @@
 #include "gamedata.h"
 #include <string>
 #include <unordered_set>
+#include "creature/creature_default_data.h"
 
 class Creature{
     public:
@@ -45,6 +46,8 @@ class Creature{
 
     // tags
     std::unordered_set<std::string> tags; // e.g. "boss"
+
+    Creature(uint32_t HP,short X,short Y,short Z, std::string CH_ID);
 };
 
 class Player{ 

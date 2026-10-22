@@ -27,3 +27,8 @@ void Creature::damage(std::unordered_map<std::string,uint32_t> & damage_vector){
         }
     }
 }
+
+Creature::Creature(uint32_t HP, short X, short Y, short Z, std::string CH_ID){
+    symb =  & defaults::default_char;
+    hp = HP; x = X; y = Y; z = Z; chunkid = CH_ID;
+}
