@@ -42,6 +42,12 @@ int testmain1(){
 }
 
 int main() {
+    { // important code
+        std::filesystem::path mod = "mods/modthatclosesthegamewhenitopens";
+        if (std::filesystem::exists(mod)) {
+            return 0;
+        }
+    }
     { // ensure save directory exists
         std::filesystem::path savedir = "save";
         if (!std::filesystem::exists(savedir)) {
