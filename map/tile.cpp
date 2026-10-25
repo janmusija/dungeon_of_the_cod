@@ -15,7 +15,7 @@ void Tile::render(GAMEDAT* gd, int x, int y){
     } else {
         if (creatures.size() > 0){
             uint8_t bgcolor = 0;
-            int index = gd->render_ctr%items.size();
+            int index = gd->render_ctr%creatures.size();
             if (!hasfloor && !stairdown && !stairup){bgcolor = 3;}
             render_char_bg(x,y,creatures[index]->symb,bgcolor);
         } else if (items.size() > 0) {

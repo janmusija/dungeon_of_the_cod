@@ -21,7 +21,7 @@ void GAMEDAT::render_chunk_segment(Chunk* ch, int x, int y, int chx, int chy, in
 
 void GAMEDAT::render_game(){
     clear();
-    render_chunk_segment(camera_chunk,5,5,0,0,0,CHUNK_WIDTH,CHUNK_WIDTH);
+    render_chunk_segment(camera_chunk,5,5,0,0,camera_z,CHUNK_WIDTH,CHUNK_WIDTH);
     refresh();
     render_ctr++;
 }
@@ -31,6 +31,7 @@ GAMEDAT::GAMEDAT(uint32_t s){
     savename = "";
     time = 0;
     render_ctr = 0;
+    camera_z = 0;
 }
 
 void GAMEDAT::tick(){
@@ -58,9 +59,8 @@ first 16*16*4 chars: structure of the level
 
 void GAMEDAT::load_chunk(std::string ch){
     // determine if it exists
-    std::string s = "save/" + savename + "/" + ch;
+    std::string s = "save/" + savename + "/chunks/" + ch;
     std::filesystem::path p = s;
-    //std::cout << s << std::endl;
     bool failed_to_load = false;
     if (std::filesystem::exists(p)){
         std::ifstream is;
@@ -130,6 +130,11 @@ void GAMEDAT::load_chunk(std::string ch){
         }
         is.close();
     } else {
+        std::string s2 = "save/" + savename + "/chunks/";
+        std::filesystem::path p2 = s2;
+        if (!std::filesystem::exists(p2)){
+            std::filesystem::create_directory(p2);
+        }
         failed_to_load = true;
     }
     if (failed_to_load){
@@ -143,7 +148,7 @@ void GAMEDAT::load_chunk(std::string ch){
 }
 
 void GAMEDAT::save_chunk(std::string ch){
-    std::string s = "save/" + savename + "/" + ch;
+    std::string s = "save/" + savename + "/chunks/" + ch;
     std::ofstream os;
     std::string str;
     auto search = LOADED_CHUNKS.find(ch);
@@ -193,4 +198,51 @@ void GAMEDAT::unload_chunk(std::string ch){
 
 void GAMEDAT::populate_chunk(std::string ch){
     // add structures etc
+}
+
+void GAMEDAT::create_gdata_file(){
+    std::string s = "save/" + savename + "/gdat";
+    std::ofstream os;
+    os.open(s);
+    
+    os << savename << std::endl;
+    os << seed << std::endl;
+    os << time << std::endl;
+    
+    // savename
+    // seed
+    // time
+}
+
+void GAMEDAT::load_gdata_file(std::string filename){
+    std::string s = "save/" + filename + "/gdat";
+
+    std::ifstream is;
+    std::string str;
+    is.open(s);
+    if (std::getline(is,str,'\n')){
+        savename = str;
+        if (std::getline(is,str,'\n')){
+            seed = std::stoull(str);
+            if (std::getline(is,str,'\n')){
+                time = std::stoull(str);
+            }
+        }
+    } else {
+        // bad
+    }
+}
+
+void GAMEDAT::spawn_creature_at(std::string typ, short X, short Y, short Z, std::string CH_ID, bool initdef){
+    auto search = LOADED_CHUNKS.find(CH_ID);
+    if (search != LOADED_CHUNKS.end() && X >= 0 && X < CHUNK_WIDTH && Y >= 0 && Y < CHUNK_WIDTH && Z >= 0 && Z < CHUNK_DEPTH){
+        std::unique_ptr<Creature> c_ptr;
+
+        c_ptr = std::make_unique<Creature>(100,X,Y,Z,CH_ID);
+        if (initdef){
+            c_ptr->initialize_default_stats();
+        }
+        Tile* tile_ptr = &(search->second.tiles[X][Y][Z]);
+        tile_ptr->creatures.push_back(std::move(c_ptr));
+    }
 }

@@ -11,6 +11,7 @@
 #include "render/render.h"
 #include "gamedata_def.h"
 #include <filesystem>
+#include "creature/types/humanoid.h"
 
 // compile with
 // g++ main.cpp -o dotc -Wall -Wextra
@@ -116,6 +117,7 @@ int main() {
     initscr();
     GAMEDAT g(0); // TK: seed; either loaded from save or given by new game creation
     g.savename = sn;
+    g.create_gdata_file();
     // handle loading of save data if relevant
     
     // have player decide and load starting chunk / player's current position (depends based on if new save or loading)
@@ -125,6 +127,7 @@ int main() {
     { // temp
     g.load_chunk("a");
     g.camera_chunk = &g.LOADED_CHUNKS["a"];
+    g.spawn_creature_at("A",1,0,0,"a",1);
     g.render_game();
     getch();
     }

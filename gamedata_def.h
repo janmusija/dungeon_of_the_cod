@@ -21,9 +21,10 @@ class GAMEDAT{
 
     uint64_t time;
 
-    uint8_t render_ctr; // for technical reasons
+    uint8_t render_ctr; // for technical reasons, counter to determine what things to display in a stack
 
     Chunk* camera_chunk;
+    int camera_z;
 
     GAMEDAT(uint32_t s);
     void render_game();
@@ -39,6 +40,12 @@ class GAMEDAT{
     void populate_chunk(std::string ch);
 
     void initialize_save_folders();
+
+    void create_gdata_file();
+
+    void load_gdata_file(std::string filename);
+
+    void spawn_creature_at(std::string typ, short X, short Y, short Z, std::string CH_ID, bool initdef);
 };
 
 #endif

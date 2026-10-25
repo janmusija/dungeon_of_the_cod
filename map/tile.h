@@ -11,6 +11,7 @@
 #include "creature/creature.h"
 #include "item/item.h"
 #include "gamedata.h"
+#include <memory>
 
 /*
 
@@ -22,8 +23,8 @@ class Tile{
     bool hasfloor; // if true, things standing on it do not fall down, and things standing below can climb up to a nearby ledge
     bool stairup; // if true, can go up
     bool stairdown; // if true, can go down
-    std::vector<Creature*> creatures;
-    std::vector<Item*> items;
+    std::vector<std::unique_ptr<Creature>> creatures;
+    std::vector<std::unique_ptr<Item>> items;
     
     void render(GAMEDAT* gd, int x, int y);
     Tile(bool wall, bool floor, bool stu, bool std);

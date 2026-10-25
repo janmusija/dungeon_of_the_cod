@@ -25,6 +25,7 @@ class Creature{
     short y;
     short z;
     std::string chunkid;
+    uint64_t uid;
 
     Fancy_Char* symb;
 
@@ -43,11 +44,13 @@ class Creature{
 
     // functions
     void damage(std::unordered_map<std::string,uint32_t>& damage_vector);
+    void initialize_default_stats();
 
     // tags
     std::unordered_set<std::string> tags; // e.g. "boss"
 
     Creature(uint32_t HP,short X,short Y,short Z, std::string CH_ID);
+
 };
 
 class Player{ 
@@ -55,5 +58,7 @@ class Player{
     // pointers to player creatures
     Creature* Target;
 };
+
+namespace crtr {}
 
 #endif
