@@ -12,12 +12,16 @@
 #include <unordered_map>
 #include "map/tile.h"
 #include "render/render.h"
+#include <random>
 
 class GAMEDAT{
     public:
     uint32_t seed;
     std::string savename;
     std::unordered_map<std::string,Chunk> LOADED_CHUNKS;
+    std::mt19937 rng;
+
+    Player player;
 
     uint64_t time;
 

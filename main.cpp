@@ -127,9 +127,13 @@ int main() {
     { // temp
     g.load_chunk("a");
     g.camera_chunk = &g.LOADED_CHUNKS["a"];
-    g.spawn_creature_at("A",1,0,0,"a",1);
+    g.spawn_creature_at("human",1,0,0,"a",1);
     g.render_game();
-    getch();
+    }
+
+    while (true){
+        int ch = getch();
+        g.render_game();
     }
     endwin();
     return 0;

@@ -8,6 +8,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include "creature/creature_maker.h"
 
 void GAMEDAT::render_chunk_segment(Chunk* ch, int x, int y, int chx, int chy, int chz, int wid, int ht){
     for (int i = chx; i<chx+wid; i++){
@@ -32,6 +33,7 @@ GAMEDAT::GAMEDAT(uint32_t s){
     time = 0;
     render_ctr = 0;
     camera_z = 0;
+    rng = std::mt19937(seed);
 }
 
 void GAMEDAT::tick(){
@@ -238,7 +240,7 @@ void GAMEDAT::spawn_creature_at(std::string typ, short X, short Y, short Z, std:
     if (search != LOADED_CHUNKS.end() && X >= 0 && X < CHUNK_WIDTH && Y >= 0 && Y < CHUNK_WIDTH && Z >= 0 && Z < CHUNK_DEPTH){
         std::unique_ptr<Creature> c_ptr;
 
-        c_ptr = std::make_unique<Creature>(100,X,Y,Z,CH_ID);
+        c_ptr = creature_maker(typ,100,X,Y,Z,CH_ID);// std::make_unique<Creature>(100,X,Y,Z,CH_ID);
         if (initdef){
             c_ptr->initialize_default_stats();
         }
