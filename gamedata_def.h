@@ -29,6 +29,8 @@ class GAMEDAT{
 
     Chunk* camera_chunk;
     int camera_z;
+    int cursor_x;
+    int cursor_y;
 
     GAMEDAT(uint32_t s);
     void render_game();
@@ -49,7 +51,13 @@ class GAMEDAT{
 
     void load_gdata_file(std::string filename);
 
-    void spawn_creature_at(std::string typ, short X, short Y, short Z, std::string CH_ID, bool initdef);
+    Creature* spawn_creature_at(std::string typ, short X, short Y, short Z, std::string CH_ID, bool initdef);
+
+    void update_based_on_input(int ch);
+    bool needs_player_input;
+    
+    bool cursor_active;
+    bool move_creature(Creature* creat, short disp_X, short disp_Y, short disp_Z);
 };
 
 #endif

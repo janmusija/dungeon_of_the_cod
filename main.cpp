@@ -127,13 +127,17 @@ int main() {
     { // temp
     g.load_chunk("a");
     g.camera_chunk = &g.LOADED_CHUNKS["a"];
-    g.spawn_creature_at("human",1,0,0,"a",1);
-    g.render_game();
+    Creature* p = g.spawn_creature_at("gnome",1,0,0,"a",1);
+    g.player.Target = p;
     }
 
+    int ch = 0;
     while (true){
-        int ch = getch();
         g.render_game();
+        if (g.needs_player_input)
+        {ch = getch();}
+        //std::cout << ch << std::endl;
+        g.update_based_on_input(ch); 
     }
     endwin();
     return 0;

@@ -8,7 +8,6 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
-#include "creature/creature_maker.h"
 
 void GAMEDAT::render_chunk_segment(Chunk* ch, int x, int y, int chx, int chy, int chz, int wid, int ht){
     for (int i = chx; i<chx+wid; i++){
@@ -34,6 +33,8 @@ GAMEDAT::GAMEDAT(uint32_t s){
     render_ctr = 0;
     camera_z = 0;
     rng = std::mt19937(seed);
+    needs_player_input = true;
+    cursor_active = false;
 }
 
 void GAMEDAT::tick(){
@@ -235,16 +236,79 @@ void GAMEDAT::load_gdata_file(std::string filename){
     }
 }
 
-void GAMEDAT::spawn_creature_at(std::string typ, short X, short Y, short Z, std::string CH_ID, bool initdef){
+Creature* GAMEDAT::spawn_creature_at(std::string typ, short X, short Y, short Z, std::string CH_ID, bool initdef){
     auto search = LOADED_CHUNKS.find(CH_ID);
     if (search != LOADED_CHUNKS.end() && X >= 0 && X < CHUNK_WIDTH && Y >= 0 && Y < CHUNK_WIDTH && Z >= 0 && Z < CHUNK_DEPTH){
         std::unique_ptr<Creature> c_ptr;
 
-        c_ptr = creature_maker(typ,100,X,Y,Z,CH_ID);// std::make_unique<Creature>(100,X,Y,Z,CH_ID);
+        c_ptr = std::make_unique<Creature>(typ,100,X,Y,Z,CH_ID);// std::make_unique<Creature>(100,X,Y,Z,CH_ID);
         if (initdef){
             c_ptr->initialize_default_stats();
         }
         Tile* tile_ptr = &(search->second.tiles[X][Y][Z]);
         tile_ptr->creatures.push_back(std::move(c_ptr));
+        return c_ptr.get();
     }
+    return nullptr;
+}
+
+void GAMEDAT::update_based_on_input(int ch){
+    if (cursor_active) {
+        // move cursor
+        if (ch == '1'){
+            
+        } else if (ch == '2' or ch == KEY_DOWN) {
+        
+        } else if (ch == '3'){
+
+        } else if (ch == '4' or ch == KEY_LEFT){
+
+        } else if (ch == '5'){
+
+        } else if (ch == '6' or ch == KEY_RIGHT){
+
+        } else if (ch == '7'){
+
+        } else if (ch == '8' or ch == KEY_UP){
+
+        } else if (ch == '9'){
+
+        } else if (ch == 'k'){ // looK
+            cursor_active = false;
+        }
+    } else {
+        if (ch == 'k'){ // looK
+            cursor_active = true;
+        }
+        // movement
+        {
+            if (ch == '1'){
+                move_creature(player.Target,-1,1,0);
+            } else if (ch == '2' or ch == KEY_DOWN) {
+                move_creature(player.Target,0,1,0);
+            } else if (ch == '3'){
+                move_creature(player.Target,1,1,0);
+            } else if (ch == '4' or ch == KEY_LEFT){
+                move_creature(player.Target,-1,0,0);
+            } else if (ch == '5'){
+                // wait
+            } else if (ch == '6' or ch == KEY_RIGHT){
+                move_creature(player.Target,1,0,0);
+            } else if (ch == '7'){
+                move_creature(player.Target,-1,-1,0);
+            } else if (ch == '8' or ch == KEY_UP){
+                move_creature(player.Target,0,-1,0);
+            } else if (ch == '9'){
+                move_creature(player.Target,1,-1,0);
+            } else if (ch == 'k'){ // looK
+                cursor_active = false;
+            }
+        }
+    }
+}
+
+bool GAMEDAT::move_creature(Creature* creat, short disp_X, short disp_Y, short disp_Z){
+    std::cout << "attempting to move by displacement vector (" << disp_X << "," << disp_Y << "," << disp_Z << ")" << std::endl;
+    // if successful return true. otherwise return false.
+    return false;
 }

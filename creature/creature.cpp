@@ -28,12 +28,14 @@ void Creature::damage(std::unordered_map<std::string,uint32_t> & damage_vector){
     }
 }
 
-Creature::Creature(uint32_t HP, short X, short Y, short Z, std::string CH_ID){
+Creature::Creature(std::string typ, uint32_t HP, short X, short Y, short Z, std::string CH_ID){
+    type = typ;
     symb =  & defaults::default_char;
     hp = HP; x = X; y = Y; z = Z; chunkid = CH_ID;
 }
 
-
+#include <iostream>
 void Creature::initialize_default_stats(){
-
+    auto f = defaults::base_symbs.find(type);
+    if (f != defaults::base_symbs.end()) {symb = &f->second;}
 }

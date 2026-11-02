@@ -12,6 +12,13 @@
 namespace defaults {
     inline Fancy_Char default_char('?',15);
 
+    inline std::unordered_map<std::string,Fancy_Char> base_symbs = {
+        {"human",Fancy_Char(L'U',7)},
+        {"elf",Fancy_Char(L'e',7)},
+        {"goblin",Fancy_Char(L'g',7)},
+        {"gnome",Fancy_Char(L'g',4)},
+    };
+
     inline std::unordered_map<std::string,float> base_resistances =
     {{"edge",1.0},{"blunt",0.5},{"fire",1.0},{"ice",1.0},{"psychic",1.0},{"magic",1.0},{"electric",1.0},{"holy",1.0}};
 
@@ -23,6 +30,7 @@ namespace defaults {
 
     inline std::unordered_map<std::string,float> zombie_resistances =
     {{"edge",0.7},{"blunt",0.7},{"fire",1.0},{"ice",1.0},{"psychic",0.0},{"magic",1.0},{"electric",1.0},{"holy",2.0}};
+
 }
 
 #endif

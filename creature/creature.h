@@ -49,7 +49,7 @@ class Creature{
     // tags
     std::unordered_set<std::string> tags; // e.g. "boss"
 
-    Creature(uint32_t HP,short X,short Y,short Z, std::string CH_ID);
+    Creature(std::string typ, uint32_t HP,short X,short Y,short Z, std::string CH_ID);
 
 };
 

@@ -8,7 +8,8 @@
 #define creature_humanoid_h
 
 #include "creature/creature.h"
-
+#include <iostream>
+/*
 namespace crtr{
     class Human : public Creature{
         public: 
@@ -40,5 +41,6 @@ namespace crtr{
         }
     };
 }
-
+*/
 #endif
+
